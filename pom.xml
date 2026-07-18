@@ -34,4 +34,12 @@
         </dependencies>
     </dependencyManagement>
 
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub Packages</name>
+            <url>https://maven.pkg.github.com/roycaroje/java-utils</url>
+        </repository>
+    </distributionManagement>
+
 </project>
