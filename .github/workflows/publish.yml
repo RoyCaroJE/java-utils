@@ -30,8 +30,14 @@ jobs:
 
       - name: Verify GPG import
         run: |
+          echo "=== GPG VERSION ==="
           gpg --version
+
+          echo "=== SECRET KEYS ==="
           gpg --list-secret-keys --keyid-format LONG
+
+          echo "=== PUBLIC KEYS ==="
+          gpg --list-keys --keyid-format LONG
 
       - name: Publish to Maven Central
         run: mvn -B clean deploy
