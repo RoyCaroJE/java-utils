@@ -9,6 +9,12 @@
         <version>0.0.5</version>
     </parent>
 
+    <name>Spring REST Starter</name>
+
+    <description>
+        Auto-configuration starter for Spring REST.
+    </description>
+
     <artifactId>spring-rest-starter</artifactId>
 
     <dependencies>

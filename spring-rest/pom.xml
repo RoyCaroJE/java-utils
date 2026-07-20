@@ -9,6 +9,12 @@
         <version>0.0.5</version>
     </parent>
 
+    <name>Spring REST</name>
+
+    <description>
+        REST utilities for Spring Boot.
+    </description>
+
     <artifactId>spring-rest</artifactId>
 
     <properties>
