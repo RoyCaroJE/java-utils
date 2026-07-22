@@ -1,3 +1,5 @@
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.roycaroje/spring-rest-starter.svg)](https://central.sonatype.com/artifact/io.github.roycaroje/spring-rest-starter)
+
 # Java Utils
 
 A collection of reusable Java and Spring libraries designed to share common functionality across multiple projects.
