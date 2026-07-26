@@ -1,6 +1,6 @@
-package advice;
+package io.github.roycaroje.springrest.advice;
 
-import dto.ErrorResponse;
+import io.github.roycaroje.springrest.dto.ErrorResponse;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

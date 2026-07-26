@@ -1,3 +1,5 @@
+package io.github.roycaroje.springrest.persistence;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 
