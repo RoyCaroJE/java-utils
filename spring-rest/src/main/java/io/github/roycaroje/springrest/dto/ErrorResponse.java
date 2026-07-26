@@ -1,4 +1,4 @@
-package dto;
+package io.github.roycaroje.springrest.dto;
 
 import java.time.Instant;
 
