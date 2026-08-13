@@ -41,6 +41,8 @@
         <module>persistence</module>
         <module>spring-rest</module>
         <module>spring-rest-starter</module>
+        <module>security</module>
+        <module>security-starter</module>
     </modules>
 
     <properties>
