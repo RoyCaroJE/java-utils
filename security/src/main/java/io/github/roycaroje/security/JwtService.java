@@ -35,31 +35,19 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(String username, Collection<? extends GrantedAuthority> authorities) {
+    public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         Map<String, Object> claims = new HashMap<>();
         List<String> roles = authorities == null ? Collections.emptyList() : authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put("roles", roles);
 
         Date now = new Date();
-        Date expiry = new Date(now.getTime() + properties.getAccessTokenExpiration());
+        Date expiry = new Date(now.getTime() + properties.getExpiration());
 
         return Jwts.builder()
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiry)
                 .addClaims(claims)
-                .signWith(signingKey(), SignatureAlgorithm.HS256)
-                .compact();
-    }
-
-    public String generateRefreshToken(String username) {
-        Date now = new Date();
-        Date expiry = new Date(now.getTime() + properties.getRefreshTokenExpiration());
-
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(expiry)
                 .signWith(signingKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

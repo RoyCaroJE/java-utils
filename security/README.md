@@ -8,10 +8,11 @@ Usage (starter preferred): add the `security-starter` dependency to your applica
 
 jwt:
   secret: 8d7f5a9c3e1b6a2d9f8e4c7b1a2d3f4e5c6b6a9d9e0f1a2b3c4d5e6f7a8b
-  access-token-expiration: 900000
-  refresh-token-expiration: 2592000000
+  expiration: 86400000
 
 Notes:
 - The module uses HS256 by default and requires a secret of sufficient length (recommend >= 32 bytes).
+- Tokens expire after the configured duration (in milliseconds). Once expired, they cannot be used.
 - Beans are annotated with `@ConditionalOnMissingBean` so you can override implementations in your application.
+- To authenticate requests, include the token in the `Authorization: Bearer <token>` header.
 
