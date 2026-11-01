@@ -1,14 +1,24 @@
-Security Starter
+## Security Starter
 
-Auto-configuration starter that imports the `security` module configuration. Add this dependency to your application to enable JWT infrastructure provided by the `security` module.
+Spring Boot starter that auto-imports the reusable `security` module.
 
-Example usage in `pom.xml`:
+## Maven dependency
 
+```xml
 <dependency>
   <groupId>io.github.roycaroje</groupId>
   <artifactId>security-starter</artifactId>
   <version>java-utils-version</version>
 </dependency>
+```
 
-Provide `jwt` properties in `application.yml` (see `../security/README.md`). Applications must provide their own `UserDetailsService` implementation.
+After adding the dependency, configure JWT properties in `application.yml`:
 
+```yaml
+jwt:
+  secret: your-very-long-secret-at-least-32-characters
+  expiration: 900000
+  refresh-expiration: 604800000
+```
+
+The starter exposes register/login/refresh and account-management endpoints out of the box.

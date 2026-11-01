@@ -11,8 +11,11 @@ public class JwtProperties {
      */
     private String secret;
 
-    /** Token expiration in milliseconds */
+    /** Access token expiration in milliseconds */
     private long expiration = 86_400_000; // 24 hours by default
+
+    /** Refresh token expiration in milliseconds */
+    private long refreshExpiration = 604_800_000; // 7 days by default
 
     public String getSecret() {
         return secret;
@@ -29,5 +32,12 @@ public class JwtProperties {
     public void setExpiration(long expiration) {
         this.expiration = expiration;
     }
-}
 
+    public long getRefreshExpiration() {
+        return refreshExpiration;
+    }
+
+    public void setRefreshExpiration(long refreshExpiration) {
+        this.refreshExpiration = refreshExpiration;
+    }
+}
