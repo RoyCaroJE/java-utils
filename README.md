@@ -13,12 +13,14 @@ The goal is to avoid duplicating common code and provide reusable modules that c
 | `persistence` | Base JPA entities and persistence utilities. Includes common fields like `publicId`, versioning and audit timestamps. |
 | `spring-rest` | Spring MVC utilities for REST applications, including global exception handling and common API responses. |
 | `spring-rest-starter` | Spring Boot auto-configuration starter for `spring-rest`. Automatically registers REST components. |
+| `security` | JWT security utilities with persisted account support (registration/authentication). |
+| `security-starter` | Spring Boot starter for `security`, ready to enable JWT login in external projects. |
 
 ## Usage
 
 Add the required module dependency to your Maven project.
 
-Example:
+### Spring REST starter
 
 ```xml
 <dependency>
@@ -28,7 +30,28 @@ Example:
 </dependency>
 ```
 
-After adding the starter, Spring Boot automatically configures the provided components.
+### Security starter (JWT login)
+
+```xml
+<dependency>
+    <groupId>io.github.roycaroje</groupId>
+    <artifactId>security-starter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+After adding `security-starter`, configure:
+
+```yaml
+jwt:
+  secret: "replace-with-a-strong-secret-at-least-32-bytes"
+  expiration: 86400000
+```
+
+Included auth endpoints:
+
+- `POST /auth/register`
+- `POST /auth/login`
 
 ## Requirements
 
@@ -47,7 +70,13 @@ java-utils
 ├── spring-rest
 │   └── REST utilities
 │
-└── spring-rest-starter
+├── spring-rest-starter
+│   └── Spring Boot auto-configuration
+│
+├── security
+│   └── JWT + account persistence utilities
+│
+└── security-starter
     └── Spring Boot auto-configuration
 ```
 
@@ -70,10 +99,10 @@ mvn clean install
 - [x] Persistence utilities
 - [x] Spring REST utilities
 - [x] Spring Boot starters
+- [x] Security utilities
 - [ ] Common exceptions
 - [ ] GraphQL utilities
 - [ ] Kafka utilities
-- [ ] Security utilities
 - [ ] Testing utilities
 - [ ] Observability utilities
 

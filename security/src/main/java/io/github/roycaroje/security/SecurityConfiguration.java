@@ -1,15 +1,21 @@
 package io.github.roycaroje.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@ComponentScan(basePackageClasses = SecurityConfiguration.class)
+@EntityScan(basePackageClasses = SecurityAccount.class)
+@EnableJpaRepositories(basePackageClasses = SecurityAccountRepository.class)
 @EnableConfigurationProperties(JwtProperties.class)
 public class SecurityConfiguration {
 
@@ -33,7 +39,7 @@ public class SecurityConfiguration {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(eh -> eh.authenticationEntryPoint(entryPoint))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/actuator/**", "/auth/register", "/auth/login").permitAll()
                         .anyRequest().authenticated()
                 );
 
@@ -42,4 +48,3 @@ public class SecurityConfiguration {
         return http.build();
     }
 }
-

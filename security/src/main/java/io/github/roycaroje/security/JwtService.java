@@ -2,6 +2,7 @@ package io.github.roycaroje.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -15,8 +16,14 @@ import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -31,13 +38,28 @@ public class JwtService {
     }
 
     private Key signingKey() {
-        byte[] keyBytes = properties.getSecret() != null ? properties.getSecret().getBytes(StandardCharsets.UTF_8) : new byte[0];
+        String secret = properties.getSecret();
+        if (secret == null || secret.isBlank()) {
+            throw new IllegalStateException("jwt.secret must be configured");
+        }
+
+        byte[] keyBytes = decodeSecret(secret);
         return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    private byte[] decodeSecret(String secret) {
+        try {
+            return Base64.getDecoder().decode(secret);
+        } catch (IllegalArgumentException ex) {
+            return secret.getBytes(StandardCharsets.UTF_8);
+        }
     }
 
     public String generateToken(String username, Collection<? extends GrantedAuthority> authorities) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> roles = authorities == null ? Collections.emptyList() : authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        List<String> roles = authorities == null
+                ? Collections.emptyList()
+                : authorities.stream().map(GrantedAuthority::getAuthority).toList();
         claims.put("roles", roles);
 
         Date now = new Date();
@@ -56,7 +78,7 @@ public class JwtService {
         try {
             Jwts.parserBuilder().setSigningKey(signingKey()).build().parseClaimsJws(token);
             return true;
-        } catch (Exception ex) {
+        } catch (JwtException | IllegalArgumentException ex) {
             return false;
         }
     }
@@ -66,26 +88,26 @@ public class JwtService {
         Claims body = jws.getBody();
         String username = body.getSubject();
 
-        // Try to load full UserDetails if available in the application context
         if (userDetailsService != null) {
             try {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                return new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                return new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
             } catch (Exception ignored) {
             }
         }
 
-        // Fallback: build authorities from token claims
         Object rolesObj = body.get("roles");
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        if (rolesObj instanceof Collection) {
-            Collection<?> roles = (Collection<?>) rolesObj;
-            for (Object r : roles) {
-                authorities.add(new SimpleGrantedAuthority(String.valueOf(r)));
+        if (rolesObj instanceof Collection<?> roles) {
+            for (Object role : roles) {
+                authorities.add(new SimpleGrantedAuthority(String.valueOf(role)));
             }
         }
 
         return new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(username, null, authorities);
     }
 }
-
