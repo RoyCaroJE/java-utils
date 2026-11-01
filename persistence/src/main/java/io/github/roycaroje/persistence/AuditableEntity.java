@@ -1,4 +1,4 @@
-package io.github.roycaroje.springrest.persistence;
+package io.github.roycaroje.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;

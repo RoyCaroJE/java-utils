@@ -1,4 +1,4 @@
-package io.github.roycaroje.springrest.persistence;
+package io.github.roycaroje.persistence;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,6 +22,9 @@ public abstract class BaseEntity {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted;
 
     @PrePersist
     void onCreate() {
