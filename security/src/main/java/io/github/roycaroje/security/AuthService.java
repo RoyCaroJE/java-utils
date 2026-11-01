@@ -41,7 +41,6 @@ public class AuthService {
         AccountUser user = new AccountUser();
         user.setEmail(normalizedEmail);
         user.setPasswordHash(passwordEncoder.encode(request.password()));
-        user.setRoles(Set.of("ROLE_USER"));
         user.setActive(true);
 
         AccountUser saved = accountUserRepository.save(user);
@@ -83,11 +82,7 @@ public class AuthService {
     }
 
     private AuthTokensResponse issueTokens(AccountUser user) {
-        var authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .toList();
-
-        String accessToken = jwtService.generateAccessToken(user.getEmail(), authorities);
+        String accessToken = jwtService.generateAccessToken(user.getEmail());
         String refreshToken = jwtService.generateRefreshToken(user.getEmail());
 
         return new AuthTokensResponse(accessToken, refreshToken, "Bearer", jwtProperties.getExpiration());

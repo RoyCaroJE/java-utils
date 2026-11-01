@@ -24,7 +24,6 @@ public class SecurityUserDetailsService implements UserDetailsService {
         return User.withUsername(user.getEmail())
                 .password(user.getPasswordHash())
                 .disabled(!user.isActive())
-                .authorities(user.getRoles().stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()))
                 .build();
     }
 }

@@ -32,7 +32,6 @@ public class AccountService {
         return new AccountProfileResponse(
                 user.getId(),
                 user.getEmail(),
-                new LinkedHashSet<>(user.getRoles()),
                 user.isActive(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()

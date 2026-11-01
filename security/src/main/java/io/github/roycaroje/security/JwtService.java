@@ -43,12 +43,8 @@ public class JwtService {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateAccessToken(String username, Collection<? extends GrantedAuthority> authorities) {
+    public String generateAccessToken(String username) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> roles = authorities == null
-                ? Collections.emptyList()
-                : authorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        claims.put(ROLES_CLAIM, roles);
         claims.put(TOKEN_TYPE_CLAIM, TOKEN_TYPE_ACCESS);
 
         Date now = new Date();
