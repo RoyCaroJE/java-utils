@@ -4,6 +4,7 @@ Reusable security module for Spring Boot with:
 
 - JWT access token + refresh token flow
 - Database-backed account registration/login
+- Database-backed user roles loaded as Spring Security `ROLE_*` authorities
 - Account maintenance endpoints (`me`, `change-password`, `deactivate`)
 - Stateless Spring Security filter chain
 
@@ -31,3 +32,6 @@ jwt:
 - Auth uses `Authorization: Bearer <accessToken>`.
 - `email` is the unique login identifier.
 - Accounts are deactivated (not deleted) with `/account/deactivate`.
+- Assign roles by inserting rows into `user_role` using the account's `user_account.public_id`.
+  Roles such as `ADMIN` are exposed as `ROLE_ADMIN`, so they can be used with
+  `@PreAuthorize("hasRole('ADMIN')")`.

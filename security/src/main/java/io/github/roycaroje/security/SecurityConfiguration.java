@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@EnableMethodSecurity
 @EnableConfigurationProperties(JwtProperties.class)
 @ComponentScan(basePackageClasses = SecurityConfiguration.class)
 @EnableJpaRepositories(basePackageClasses = AccountUserRepository.class)
@@ -32,8 +34,11 @@ public class SecurityConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UserDetailsService.class)
-    public UserDetailsService userDetailsService(AccountUserRepository accountUserRepository) {
-        return new SecurityUserDetailsService(accountUserRepository);
+    public UserDetailsService userDetailsService(
+            AccountUserRepository accountUserRepository,
+            UserRoleRepository userRoleRepository
+    ) {
+        return new SecurityUserDetailsService(accountUserRepository, userRoleRepository);
     }
 
     @Bean

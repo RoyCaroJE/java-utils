@@ -6,14 +6,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 public class SecurityUserDetailsService implements UserDetailsService {
 
     private final AccountUserRepository accountUserRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    public SecurityUserDetailsService(AccountUserRepository accountUserRepository) {
+    public SecurityUserDetailsService(AccountUserRepository accountUserRepository, UserRoleRepository userRoleRepository) {
         this.accountUserRepository = accountUserRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Override
@@ -24,6 +26,16 @@ public class SecurityUserDetailsService implements UserDetailsService {
         return User.withUsername(user.getEmail())
                 .password(user.getPasswordHash())
                 .disabled(!user.isActive())
+                .authorities(userRoleRepository.findByUserPublicId(user.getPublicId()).stream()
+                        .map(UserRole::getRole)
+                        .map(this::toAuthority)
+                        .map(SimpleGrantedAuthority::new)
+                        .toList())
                 .build();
+    }
+
+    private String toAuthority(String role) {
+        String normalizedRole = role.trim().toUpperCase(Locale.ROOT);
+        return normalizedRole.startsWith("ROLE_") ? normalizedRole : "ROLE_" + normalizedRole;
     }
 }
