@@ -2,6 +2,7 @@ package io.github.roycaroje.security;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.persistence.autoconfigure.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 @EnableConfigurationProperties(JwtProperties.class)
 @ComponentScan(basePackageClasses = SecurityConfiguration.class)
+@EntityScan(basePackageClasses = {
+        AccountUser.class,
+        UserRole.class
+})
 @EnableJpaRepositories(basePackageClasses = AccountUserRepository.class)
 public class SecurityConfiguration {
 
