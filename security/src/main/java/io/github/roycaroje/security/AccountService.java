@@ -30,7 +30,6 @@ public class AccountService {
     public AccountProfileResponse me() {
         AccountUser user = getCurrentUser();
         return new AccountProfileResponse(
-                user.getId(),
                 user.getEmail(),
                 user.isActive(),
                 user.getCreatedAt(),
