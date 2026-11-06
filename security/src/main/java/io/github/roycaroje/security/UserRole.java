@@ -3,6 +3,9 @@ package io.github.roycaroje.security;
 import io.github.roycaroje.persistence.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
@@ -17,6 +20,10 @@ import java.util.UUID;
         )
 )
 public class UserRole extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(name = "user_public_id", nullable = false, length = 50)
     private UUID userPublicId;
